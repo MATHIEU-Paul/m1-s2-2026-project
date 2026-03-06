@@ -1,6 +1,6 @@
 import {
   ArrowLeftOutlined,
-  SaveOutlined,
+  EditOutlined,
   UserOutlined,
 } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
@@ -12,6 +12,7 @@ import {
   Image,
   Input,
   List,
+  message,
   Row,
   Skeleton,
   Space,
@@ -30,6 +31,7 @@ interface ClientDetailsProps {
 export const ClientDetails = ({ id }: ClientDetailsProps) => {
   const { isLoading, client, purchases, loadClient, updateClient } =
     useClientDetailsProvider(id)
+  const [isEditing, setIsEditing] = useState(false)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -60,13 +62,33 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
     }
   }, [firstName, lastName, email, client])
 
-  const handleSave = () => {
-    updateClient({
-      firstName,
-      lastName,
-      email: email || undefined,
-    })
-    setHasChanges(false)
+  const startEditing = () => {
+    setIsEditing(true)
+  }
+
+  const cancelEditing = () => {
+    if (client) {
+      setFirstName(client.firstName)
+      setLastName(client.lastName)
+      setEmail(client.email || '')
+    }
+    setIsEditing(false)
+  }
+
+  const handleSave = async () => {
+    try {
+      await updateClient({
+        firstName,
+        lastName,
+        email: email || undefined,
+      })
+      await loadClient()
+      setHasChanges(false)
+      setIsEditing(false)
+      message.success('Client updated successfully!')
+    } catch (error) {
+      console.error('Update failed:', error)
+    }
   }
 
   if (isLoading) {
@@ -87,9 +109,38 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
         ]}
       />
 
-      <Link to="/clients">
-        <ArrowLeftOutlined /> Back to Clients
-      </Link>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '1rem',
+        }}
+      >
+        <Link to="/clients">
+          <ArrowLeftOutlined /> Back to Clients
+        </Link>
+
+        <Space>
+          {isEditing ? (
+            <>
+              <Button type="primary" onClick={handleSave} disabled={!hasChanges}>
+                Save
+              </Button>
+              <Button onClick={cancelEditing}>Cancel</Button>
+            </>
+          ) : (
+            <Button
+              type="primary"
+              icon={<EditOutlined />}
+              onClick={startEditing}
+              disabled={!client}
+            >
+              Edit Info
+            </Button>
+          )}
+        </Space>
+      </div>
 
       <Card title="Client Information" style={{ marginTop: '1rem' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
@@ -110,40 +161,48 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
           </div>
           <div>
             <label style={{ fontWeight: 'bold' }}>First Name:</label>
-            <Input
-              value={firstName}
-              onChange={e => setFirstName(e.target.value)}
-              style={{ marginTop: '0.5rem' }}
-            />
+            {isEditing ? (
+              <Input
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+                style={{ marginTop: '0.5rem' }}
+              />
+            ) : (
+              <Typography.Text style={{ marginTop: '0.5rem', display: 'block' }}>
+                {firstName}
+              </Typography.Text>
+            )}
           </div>
           <div>
             <label style={{ fontWeight: 'bold' }}>Last Name:</label>
-            <Input
-              value={lastName}
-              onChange={e => setLastName(e.target.value)}
-              style={{ marginTop: '0.5rem' }}
-            />
+            {isEditing ? (
+              <Input
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
+                style={{ marginTop: '0.5rem' }}
+              />
+            ) : (
+              <Typography.Text style={{ marginTop: '0.5rem', display: 'block' }}>
+                {lastName}
+              </Typography.Text>
+            )}
           </div>
           <div>
             <label style={{ fontWeight: 'bold' }}>Email:</label>
-            <Input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="Optional"
-              style={{ marginTop: '0.5rem' }}
-            />
+            {isEditing ? (
+              <Input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Optional"
+                style={{ marginTop: '0.5rem' }}
+              />
+            ) : (
+              <Typography.Text style={{ marginTop: '0.5rem', display: 'block' }}>
+                {email || '-'}
+              </Typography.Text>
+            )}
           </div>
-          {hasChanges && (
-            <Button
-              type="primary"
-              icon={<SaveOutlined />}
-              onClick={handleSave}
-              style={{ marginTop: '1rem' }}
-            >
-              Save Changes
-            </Button>
-          )}
         </Space>
       </Card>
 

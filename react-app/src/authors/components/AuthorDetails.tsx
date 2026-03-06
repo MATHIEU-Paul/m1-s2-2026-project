@@ -11,7 +11,6 @@ import {
   Input,
   List,
   message,
-  Modal,
   Skeleton,
   Space,
   Typography,
@@ -30,7 +29,7 @@ interface AuthorDetailsProps {
 export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
   const { isLoading, author, loadAuthor, updateAuthor } =
     useAuthorDetailsProvider(id)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
   const [form] = Form.useForm()
   const authorTitle = [author?.firstName, author?.lastName]
     .filter(Boolean)
@@ -40,22 +39,36 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
     loadAuthor()
   }, [id, loadAuthor])
 
-  const showEditModal = () => {
+  // Sync form values whenever the author data changes
+  useEffect(() => {
     if (author) {
       form.setFieldsValue({
         firstName: author.firstName,
         lastName: author.lastName,
       })
-      setIsModalOpen(true)
     }
+  }, [author, form])
+
+  const startEditing = () => {
+    setIsEditing(true)
   }
 
-  const handleOk = async () => {
+  const cancelEditing = () => {
+    if (author) {
+      form.setFieldsValue({
+        firstName: author.firstName,
+        lastName: author.lastName,
+      })
+    }
+    setIsEditing(false)
+  }
+
+  const saveChanges = async () => {
     try {
       const values = await form.validateFields()
       await updateAuthor(values)
       await loadAuthor()
-      setIsModalOpen(false)
+      setIsEditing(false)
       message.success('Author updated successfully!')
     } catch (error) {
       console.error('Update failed:', error)
@@ -87,9 +100,25 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
         }}
       >
         <Typography.Title level={1}>Author Details</Typography.Title>
-        <Button type="primary" icon={<EditOutlined />} onClick={showEditModal}>
-          Edit Info
-        </Button>
+        <Space>
+          {isEditing ? (
+            <>
+              <Button type="primary" onClick={saveChanges}>
+                Save
+              </Button>
+              <Button onClick={cancelEditing}>Cancel</Button>
+            </>
+          ) : (
+            <Button
+              type="primary"
+              icon={<EditOutlined />}
+              onClick={startEditing}
+              disabled={!author}
+            >
+              Edit Info
+            </Button>
+          )}
+        </Space>
       </div>
 
       <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
@@ -100,13 +129,38 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
             {getInitials(author?.firstName, author?.lastName)}
           </Avatar>
         )}
-        <div>
-          <Typography.Title level={2} style={{ margin: 0 }}>
-            {author?.firstName} {author?.lastName}
-          </Typography.Title>
-          <Typography.Text type="secondary" strong>
-            Average Purchases per book: {author?.purchasesAverage.toFixed(2)}
-          </Typography.Text>
+        <div style={{ flex: 1 }}>
+          {isEditing ? (
+            <Form form={form} layout="vertical" name="edit_author_form">
+              <Form.Item
+                name="firstName"
+                label="First Name"
+                rules={[
+                  { required: true, message: 'Please enter the first name' },
+                ]}
+              >
+                <Input placeholder="Enter first name" />
+              </Form.Item>
+              <Form.Item
+                name="lastName"
+                label="Last Name"
+                rules={[
+                  { required: true, message: 'Please enter the last name' },
+                ]}
+              >
+                <Input placeholder="Enter last name" />
+              </Form.Item>
+            </Form>
+          ) : (
+            <>
+              <Typography.Title level={2} style={{ margin: 0 }}>
+                {author?.firstName} {author?.lastName}
+              </Typography.Title>
+              <Typography.Text type="secondary" strong>
+                Average Purchases per book: {author?.purchasesAverage.toFixed(2)}
+              </Typography.Text>
+            </>
+          )}
         </div>
       </div>
 
@@ -142,32 +196,6 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
         />
       )}
 
-      <Modal
-        title="Edit Author Information"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={() => setIsModalOpen(false)}
-        okText="Save Changes"
-        cancelText="Cancel"
-        destroyOnClose
-      >
-        <Form form={form} layout="vertical" name="edit_author_form">
-          <Form.Item
-            name="firstName"
-            label="First Name"
-            rules={[{ required: true, message: 'Please enter the first name' }]}
-          >
-            <Input placeholder="Enter first name" />
-          </Form.Item>
-          <Form.Item
-            name="lastName"
-            label="Last Name"
-            rules={[{ required: true, message: 'Please enter the last name' }]}
-          >
-            <Input placeholder="Enter last name" />
-          </Form.Item>
-        </Form>
-      </Modal>
     </Space>
   )
 }
