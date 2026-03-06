@@ -1,9 +1,9 @@
 import {
-    BookOutlined,
-    HomeOutlined,
-    InfoOutlined,
-    TeamOutlined,
-    UserOutlined,
+  BookOutlined,
+  HomeOutlined,
+  InfoOutlined,
+  TeamOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import { Space, Switch, type MenuProps } from 'antd'

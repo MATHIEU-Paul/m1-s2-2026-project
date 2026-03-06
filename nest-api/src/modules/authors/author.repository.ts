@@ -27,7 +27,7 @@ export class AuthorRepository {
     const sortField = input?.sort?.field ?? 'lastName';
     const sortDirection = input?.sort?.direction ?? 'ASC';
 
-     const order =
+    const order =
       sortField === 'lastName'
         ? {
             'author.lastName': sortDirection,

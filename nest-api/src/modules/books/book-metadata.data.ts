@@ -1,8 +1,4 @@
-export const DEFAULT_BOOK_TYPES = [
-  'Ebook',
-  'Paperback',
-  'Hardcover',
-];
+export const DEFAULT_BOOK_TYPES = ['Ebook', 'Paperback', 'Hardcover'];
 
 export const DEFAULT_BOOK_GENRES = [
   'Fantasy',

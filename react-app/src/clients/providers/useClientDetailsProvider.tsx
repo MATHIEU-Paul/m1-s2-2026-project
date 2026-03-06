@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react'
 import { API_BASE_URL } from '../../config/api'
 import type {
-    ClientModel,
-    ClientPurchase,
-    ClientWithPurchasesModel,
-    UpdateClientModel,
+  ClientModel,
+  ClientPurchase,
+  ClientWithPurchasesModel,
+  UpdateClientModel,
 } from '../ClientModel'
 
 export const useClientDetailsProvider = (id: string) => {

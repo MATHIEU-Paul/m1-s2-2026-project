@@ -49,7 +49,7 @@ export class BookRepository {
         : {
             [sortField]: sortDirection,
             ...(sortField !== 'title' && {
-              title: 'ASC' as const
+              title: 'ASC' as const,
             }),
           };
 

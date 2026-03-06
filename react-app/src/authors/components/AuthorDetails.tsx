@@ -1,4 +1,8 @@
-import { ArrowLeftOutlined, EditOutlined, TeamOutlined } from '@ant-design/icons'
+import {
+  ArrowLeftOutlined,
+  EditOutlined,
+  TeamOutlined,
+} from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import {
   Avatar,
@@ -28,6 +32,9 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
     useAuthorDetailsProvider(id)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [form] = Form.useForm()
+  const authorTitle = [author?.firstName, author?.lastName]
+    .filter(Boolean)
+    .join(' ')
 
   useEffect(() => {
     loadAuthor()
@@ -62,7 +69,9 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
       <AppBreadcrumb
         items={[
           { title: 'Authors', href: '/authors', icon: <TeamOutlined /> },
-          { title: `${author?.firstName} ${author?.lastName}` || 'Author Details' },
+          {
+            title: authorTitle || 'Author Details',
+          },
         ]}
       />
 

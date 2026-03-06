@@ -28,7 +28,7 @@ export function AppBreadcrumb({ items, showHome = true }: AppBreadcrumbProps) {
           },
         ]
       : []),
-    ...items.map((item) => ({
+    ...items.map(item => ({
       title: item.href ? (
         <Link to={item.href}>
           {item.icon && <span style={{ marginRight: '4px' }}>{item.icon}</span>}

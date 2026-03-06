@@ -30,7 +30,7 @@ export class ClientRepository {
             lastName: sortDirection,
             firstName: sortDirection,
           }
-          : {
+        : {
             firstName: sortDirection,
             lastName: sortDirection,
           };

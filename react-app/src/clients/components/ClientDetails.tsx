@@ -1,17 +1,21 @@
-import { ArrowLeftOutlined, SaveOutlined, UserOutlined } from '@ant-design/icons'
+import {
+  ArrowLeftOutlined,
+  SaveOutlined,
+  UserOutlined,
+} from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import {
-    Avatar,
-    Button,
-    Card,
-    Col,
-    Image,
-    Input,
-    List,
-    Row,
-    Skeleton,
-    Space,
-    Typography,
+  Avatar,
+  Button,
+  Card,
+  Col,
+  Image,
+  Input,
+  List,
+  Row,
+  Skeleton,
+  Space,
+  Typography,
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { AppBreadcrumb } from '../../components/AppBreadcrumb'
@@ -30,6 +34,9 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [hasChanges, setHasChanges] = useState(false)
+  const clientTitle = [client?.firstName, client?.lastName]
+    .filter(Boolean)
+    .join(' ')
 
   useEffect(() => {
     loadClient()
@@ -74,7 +81,9 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
       <AppBreadcrumb
         items={[
           { title: 'Clients', href: '/clients', icon: <UserOutlined /> },
-          { title: `${client?.firstName} ${client?.lastName}` || 'Client Details' },
+          {
+            title: clientTitle || 'Client Details',
+          },
         ]}
       />
 
