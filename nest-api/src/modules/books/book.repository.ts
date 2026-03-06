@@ -48,7 +48,9 @@ export class BookRepository {
           }
         : {
             [sortField]: sortDirection,
-            title: 'ASC' as const,
+            ...(sortField !== 'title' && {
+              title: 'ASC' as const
+            }),
           };
 
     const [books, totalCount] = await this.bookRepository.findAndCount({

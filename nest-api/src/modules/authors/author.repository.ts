@@ -27,6 +27,17 @@ export class AuthorRepository {
     const sortField = input?.sort?.field ?? 'lastName';
     const sortDirection = input?.sort?.direction ?? 'ASC';
 
+     const order =
+      sortField === 'lastName'
+        ? {
+            'author.lastName': sortDirection,
+            'author.firstName': sortDirection,
+          }
+        : {
+            'author.firstName': sortDirection,
+            'author.lastName': sortDirection,
+          };
+
     const [authors, totalCount] = await this.authorRepository
       .createQueryBuilder('author')
       .select([
@@ -35,9 +46,8 @@ export class AuthorRepository {
         'author.lastName',
         'author.imagePath',
       ])
-      .loadRelationCountAndMap('author.bookCount', 'author.books')
-      .orderBy(`author.${sortField}`, sortDirection)
-      .addOrderBy('author.firstName', 'ASC')
+      .loadRelationCountAndMap('author.bookCount', 'author.books') // Optimization to avoid N+1 query when fetching book count for each author
+      .orderBy(order)
       .take(input?.limit)
       .skip(input?.offset)
       .getManyAndCount();

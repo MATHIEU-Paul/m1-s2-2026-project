@@ -23,12 +23,22 @@ export class ClientRepository {
     const sortField = input?.sort?.field ?? 'lastName';
     const sortDirection = input?.sort?.direction ?? 'ASC';
 
+    // On créé l'order dynamique en fonction du champ de tri, en ajoutant un tri secondaire sur le nom si le tri principal n'est pas déjà le nom
+    const order =
+      sortField === 'lastName'
+        ? {
+            lastName: sortDirection,
+            firstName: sortDirection,
+          }
+          : {
+            firstName: sortDirection,
+            lastName: sortDirection,
+          };
+
     return this.clientRepository.findAndCount({
       take: input?.limit,
       skip: input?.offset,
-      order: {
-        [sortField]: sortDirection,
-      },
+      order,
     });
   }
 
