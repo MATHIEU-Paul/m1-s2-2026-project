@@ -61,7 +61,8 @@ export function ClientListItem({
         width: '100%',
         height: '50px',
         borderRadius: '10px',
-        backgroundColor: '#EEEEEE',
+        backgroundColor: 'var(--app-surface-muted)',
+        color: 'var(--app-text)',
         margin: '1rem 0',
         padding: '.25rem',
         display: 'flex',
@@ -91,7 +92,7 @@ export function ClientListItem({
             {hasImagePath(client.imagePath) ? (
               <Avatar src={API_BASE_URL + client.imagePath.trim()} />
             ) : (
-              <Avatar style={{ backgroundColor: '#395E66' }}>
+              <Avatar style={{ backgroundColor: 'var(--app-brand-600)' }}>
                 {getInitials(client.firstName, client.lastName)}
               </Avatar>
             )}

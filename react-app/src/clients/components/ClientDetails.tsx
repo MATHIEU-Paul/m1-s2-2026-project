@@ -96,10 +96,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
   }
 
   return (
-    <Space
-      direction="vertical"
-      style={{ textAlign: 'left', width: '95%', padding: '1rem' }}
-    >
+    <Space direction="vertical" style={{ textAlign: 'left', width: '100%' }}>
       <AppBreadcrumb
         items={[
           { title: 'Clients', href: '/clients', icon: <UserOutlined /> },
@@ -124,7 +121,11 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
         <Space>
           {isEditing ? (
             <>
-              <Button type="primary" onClick={handleSave} disabled={!hasChanges}>
+              <Button
+                type="primary"
+                onClick={handleSave}
+                disabled={!hasChanges}
+              >
                 Save
               </Button>
               <Button onClick={cancelEditing}>Cancel</Button>
@@ -154,7 +155,10 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
             {hasImagePath(client?.imagePath) ? (
               <Avatar size={84} src={API_BASE_URL + client.imagePath.trim()} />
             ) : (
-              <Avatar size={84} style={{ backgroundColor: '#395E66' }}>
+              <Avatar
+                size={84}
+                style={{ backgroundColor: 'var(--app-brand-600)' }}
+              >
                 {getInitials(client?.firstName, client?.lastName)}
               </Avatar>
             )}
@@ -168,7 +172,9 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
                 style={{ marginTop: '0.5rem' }}
               />
             ) : (
-              <Typography.Text style={{ marginTop: '0.5rem', display: 'block' }}>
+              <Typography.Text
+                style={{ marginTop: '0.5rem', display: 'block' }}
+              >
                 {firstName}
               </Typography.Text>
             )}
@@ -182,7 +188,9 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
                 style={{ marginTop: '0.5rem' }}
               />
             ) : (
-              <Typography.Text style={{ marginTop: '0.5rem', display: 'block' }}>
+              <Typography.Text
+                style={{ marginTop: '0.5rem', display: 'block' }}
+              >
                 {lastName}
               </Typography.Text>
             )}
@@ -198,7 +206,9 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
                 style={{ marginTop: '0.5rem' }}
               />
             ) : (
-              <Typography.Text style={{ marginTop: '0.5rem', display: 'block' }}>
+              <Typography.Text
+                style={{ marginTop: '0.5rem', display: 'block' }}
+              >
                 {email || '-'}
               </Typography.Text>
             )}
@@ -221,7 +231,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
               <List.Item
                 style={{
                   marginBottom: '1rem',
-                  borderBottom: '1px solid #f0f0f0',
+                  borderBottom: '1px solid var(--app-border-subtle)',
                 }}
               >
                 <Row gutter={16} style={{ width: '100%' }}>

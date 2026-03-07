@@ -51,7 +51,8 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
       style={{
         width: '100%',
         borderRadius: '10px',
-        backgroundColor: '#EEEEEE',
+        backgroundColor: 'var(--app-surface-muted)',
+        color: 'var(--app-text)',
         margin: '1rem 0',
         padding: '.5rem',
         display: 'flex',
@@ -96,7 +97,7 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
           </div>
         )}
       </Col>
-      <Col span={9} style={{ margin: 'auto 0', color: '#395E66' }}>
+      <Col span={9} style={{ margin: 'auto 0', color: 'var(--app-brand-600)' }}>
         by <span style={{ fontWeight: 'bold' }}>{book.author.firstName}</span>{' '}
         <span style={{ fontWeight: 'bold' }}>{book.author.lastName}</span>
       </Col>

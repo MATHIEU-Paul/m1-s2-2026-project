@@ -47,7 +47,7 @@ export function AppBreadcrumb({ items, showHome = true }: AppBreadcrumbProps) {
     <Breadcrumb
       style={{
         padding: '16px 24px',
-        backgroundColor: 'rgba(0, 0, 0, 0.02)',
+        backgroundColor: 'var(--app-surface-muted)',
         borderRadius: '4px',
         marginBottom: '16px',
       }}

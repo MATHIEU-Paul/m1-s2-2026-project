@@ -78,7 +78,7 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
   if (isLoading) return <Skeleton active />
 
   return (
-    <Space direction="vertical" style={{ textAlign: 'left', width: '95%' }}>
+    <Space direction="vertical" style={{ textAlign: 'left', width: '100%' }}>
       <AppBreadcrumb
         items={[
           { title: 'Authors', href: '/authors', icon: <TeamOutlined /> },
@@ -125,7 +125,10 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
         {hasImagePath(author?.imagePath) ? (
           <Avatar size={100} src={API_BASE_URL + author.imagePath.trim()} />
         ) : (
-          <Avatar size={100} style={{ backgroundColor: '#395E66' }}>
+          <Avatar
+            size={100}
+            style={{ backgroundColor: 'var(--app-brand-600)' }}
+          >
             {getInitials(author?.firstName, author?.lastName)}
           </Avatar>
         )}
@@ -157,7 +160,8 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
                 {author?.firstName} {author?.lastName}
               </Typography.Title>
               <Typography.Text type="secondary" strong>
-                Average Purchases per book: {author?.purchasesAverage.toFixed(2)}
+                Average Purchases per book:{' '}
+                {author?.purchasesAverage.toFixed(2)}
               </Typography.Text>
             </>
           )}
@@ -195,7 +199,6 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
           )}
         />
       )}
-
     </Space>
   )
 }

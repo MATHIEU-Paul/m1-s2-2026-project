@@ -42,7 +42,9 @@ export const useBookProvider = () => {
           limit: effectiveQuery.limit,
           offset: effectiveQuery.offset,
           sort: `${effectiveQuery.sortField},${effectiveQuery.sortOrder}`,
-          ...(effectiveQuery.genreId ? { genreId: effectiveQuery.genreId } : {}),
+          ...(effectiveQuery.genreId
+            ? { genreId: effectiveQuery.genreId }
+            : {}),
         },
       })
       .then(data => {

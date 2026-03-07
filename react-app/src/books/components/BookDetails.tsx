@@ -91,7 +91,7 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
   if (isLoading) return <Skeleton active />
 
   return (
-    <Space direction="vertical" style={{ textAlign: 'left', width: '95%' }}>
+    <Space direction="vertical" style={{ textAlign: 'left', width: '100%' }}>
       <AppBreadcrumb
         items={[
           { title: 'Books', href: '/books', icon: <BookOutlined /> },
@@ -200,7 +200,11 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
             <img
               src={API_BASE_URL + book.coverPath}
               alt={`${book.title} cover`}
-              style={{ marginTop: '1rem', maxWidth: '200px', borderRadius: '5px' }}
+              style={{
+                marginTop: '1rem',
+                maxWidth: '200px',
+                borderRadius: '5px',
+              }}
             />
           )}
         </>

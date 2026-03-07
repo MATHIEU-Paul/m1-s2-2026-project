@@ -44,7 +44,6 @@ export function AuthorList() {
         renderItem={author => (
           <AuthorListItem author={author} onDelete={deleteAuthor} />
         )}
-        listStyle={{ padding: '0 .5rem' }}
         totalCount={totalCount}
         pageSizeOptions={[5, 10, 20, 50]}
         entityLabel="authors"

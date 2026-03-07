@@ -1,11 +1,5 @@
 import { Pagination, Radio, Select, Space, Typography } from 'antd'
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 export type ListSortOrder = 'ASC' | 'DESC'
 
@@ -36,7 +30,6 @@ type QueryableListProps<TSortField extends string, TItem> = {
   items: TItem[]
   getItemKey: (item: TItem) => string
   renderItem: (item: TItem) => ReactNode
-  listStyle?: CSSProperties
   totalCount: number
   pageSizeOptions?: number[]
   entityLabel?: string
@@ -63,7 +56,6 @@ export function QueryableList<TSortField extends string, TItem>({
   items,
   getItemKey,
   renderItem,
-  listStyle,
   totalCount,
   pageSizeOptions,
   entityLabel,
@@ -120,7 +112,6 @@ export function QueryableList<TSortField extends string, TItem>({
     <>
       <div
         style={{
-          padding: '0 1rem',
           marginTop: '1rem',
           marginBottom: '0.75rem',
         }}
@@ -159,7 +150,7 @@ export function QueryableList<TSortField extends string, TItem>({
         </div>
       </div>
 
-      <div style={listStyle ?? { padding: '0 .5rem' }}>
+      <div>
         {items.map(item => (
           <div key={getItemKey(item)}>{renderItem(item)}</div>
         ))}

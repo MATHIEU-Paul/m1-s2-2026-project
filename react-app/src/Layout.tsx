@@ -14,6 +14,7 @@ import { Route as authorsRoute } from './routes/authors'
 import { Route as booksRoute } from './routes/books'
 import { Route as clientsRoute } from './routes/clients'
 import { Route as indexRoute } from './routes/index'
+import './styles/navbar.css'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -64,20 +65,36 @@ export function Layout({ children }: LayoutProps) {
           alignItems: 'center',
           textAlign: 'left',
           width: '100%',
-          backgroundColor: '#395E66',
-          color: 'white',
+          backgroundColor: 'var(--app-header-bg)',
+          color: 'var(--app-header-text)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-          <h2
-            style={{ margin: '0 1rem', padding: '1rem', whiteSpace: 'nowrap' }}
+          <Link
+            to={indexRoute.to}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              margin: '0 1rem',
+              padding: '0.75rem 1rem',
+              whiteSpace: 'nowrap',
+              textDecoration: 'none',
+              color: 'inherit',
+            }}
           >
-            Babel&apos;s Library
-          </h2>
+            <img
+              src="/babel.png"
+              alt="Babel logo"
+              style={{ width: '32px', height: '32px', objectFit: 'contain' }}
+            />
+            <h2 style={{ margin: 0 }}>Babel&apos;s Library</h2>
+          </Link>
           <Menu
             theme="dark"
             mode="horizontal"
             items={items}
+            className="main-nav"
             style={{
               backgroundColor: 'transparent',
               flexGrow: 1,
@@ -95,7 +112,16 @@ export function Layout({ children }: LayoutProps) {
           />
         </div>
       </div>
-      <div style={{ width: '100%', overflowY: 'scroll' }}>{children}</div>
+      <div
+        style={{
+          width: '100%',
+          overflowY: 'scroll',
+          padding: '2rem',
+          boxSizing: 'border-box',
+        }}
+      >
+        {children}
+      </div>
     </Space>
   )
 }

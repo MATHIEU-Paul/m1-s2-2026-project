@@ -1,19 +1,19 @@
 import { BookOutlined } from '@ant-design/icons'
-import { AppBreadcrumb } from '../../components/AppBreadcrumb'
 import { Select } from 'antd'
 import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { AppBreadcrumb } from '../../components/AppBreadcrumb'
 import {
   QueryableList,
   type QueryableListQuery,
 } from '../../components/QueryableList'
+import { API_BASE_URL } from '../../config/api'
 import {
   useBookProvider,
   type BookSortField,
 } from '../providers/useBookProvider'
 import { BookListItem } from './BookListItem'
 import { CreateBookModal } from './CreateBookModal'
-import { API_BASE_URL } from '../../config/api'
-import { useEffect, useState } from 'react'
 
 export function BookList() {
   const { books, totalCount, loadBooks, deleteBook, updateBook, createBook } =
@@ -106,7 +106,6 @@ export function BookList() {
             onUpdate={updateBook}
           />
         )}
-        listStyle={{ padding: '0 .5rem' }}
         totalCount={totalCount}
         pageSizeOptions={[5, 10, 20, 50]}
         entityLabel="books"

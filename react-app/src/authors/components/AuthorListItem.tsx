@@ -31,7 +31,8 @@ export function AuthorListItem({ author, onDelete }: AuthorListItemProps) {
         width: '100%',
         height: '60px',
         borderRadius: '10px',
-        backgroundColor: '#EEEEEE',
+        backgroundColor: 'var(--app-surface-muted)',
+        color: 'var(--app-text)',
         margin: '1rem 0',
         padding: '.25rem 1rem',
         display: 'flex',
@@ -46,7 +47,7 @@ export function AuthorListItem({ author, onDelete }: AuthorListItemProps) {
         {hasImagePath(author.imagePath) ? (
           <Avatar src={API_BASE_URL + author.imagePath.trim()} />
         ) : (
-          <Avatar style={{ backgroundColor: '#395E66' }}>
+          <Avatar style={{ backgroundColor: 'var(--app-brand-600)' }}>
             {getInitials(author.firstName, author.lastName)}
           </Avatar>
         )}
