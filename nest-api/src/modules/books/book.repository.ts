@@ -4,14 +4,14 @@ import { deleteImage, saveImage } from 'src/utils/image';
 import { DataSource, Repository } from 'typeorm';
 import { AuthorEntity } from '../authors/author.entity';
 import {
-  BookModel,
-  BookTypeModel,
-  CreateBookModel,
-  CreateBookTypeModel,
-  CreateGenreModel,
-  FilterBooksModel,
-  GenreModel,
-  UpdateBookModel,
+    BookModel,
+    BookTypeModel,
+    CreateBookModel,
+    CreateBookTypeModel,
+    CreateGenreModel,
+    FilterBooksModel,
+    GenreModel,
+    UpdateBookModel,
 } from './book.model';
 import { BookEntity, BookId } from './entities/book.entity';
 import { BookTypeEntity } from './entities/booktype.entity';
@@ -155,11 +155,14 @@ export class BookRepository {
     return this.getBookById(id);
   }
 
-  public async deleteBook(id: BookId): Promise<void> {
+  public async deleteBook(id: BookId): Promise<boolean> {
     const result = await this.bookRepository.delete(id);
     if (result.affected && result.affected > 0) {
       deleteImage('books', id);
+      return true;
     }
+
+    return false;
   }
 
   public async deleteBooks(ids: BookId[]): Promise<void> {

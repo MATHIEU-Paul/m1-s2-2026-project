@@ -5,12 +5,12 @@ import { Repository } from 'typeorm';
 import { PurchaseService } from '../purchases/purchase.service';
 import { AuthorEntity, AuthorId } from './author.entity';
 import {
-  AuthorDetailsModel,
-  AuthorModel,
-  AuthorWithBookCountModel,
-  CreateAuthorModel,
-  FilterAuthorsModel,
-  UpdateAuthorModel,
+    AuthorDetailsModel,
+    AuthorModel,
+    AuthorWithBookCountModel,
+    CreateAuthorModel,
+    FilterAuthorsModel,
+    UpdateAuthorModel,
 } from './author.model';
 
 @Injectable()
@@ -145,10 +145,13 @@ export class AuthorRepository {
     return this.getAuthorById(id);
   }
 
-  public async deleteAuthor(id: AuthorId): Promise<void> {
+  public async deleteAuthor(id: AuthorId): Promise<boolean> {
     const result = await this.authorRepository.delete(id);
     if (result.affected && result.affected > 0) {
       deleteImage('authors', id);
+      return true;
     }
+
+    return false;
   }
 }

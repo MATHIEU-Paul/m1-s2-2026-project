@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AuthorId } from './author.entity';
 import {
   AuthorDetailsModel,
@@ -22,8 +22,13 @@ export class AuthorService {
 
   public async getAuthorById(
     id: AuthorId,
-  ): Promise<AuthorDetailsModel | undefined> {
-    return this.authorRepository.getAuthorById(id);
+  ): Promise<AuthorDetailsModel> {
+    const author = await this.authorRepository.getAuthorById(id);
+    if (!author) {
+      throw new NotFoundException(`Author with id ${id} not found`);
+    }
+
+    return author;
   }
 
   public async createAuthor(author: CreateAuthorModel): Promise<AuthorModel> {
@@ -33,16 +38,19 @@ export class AuthorService {
   public async updateAuthor(
     id: AuthorId,
     author: UpdateAuthorModel,
-  ): Promise<AuthorModel | undefined> {
-    const oldAuthor = await this.getAuthorById(id);
-    if (!oldAuthor) {
-      return undefined;
+  ): Promise<AuthorModel> {
+    const updatedAuthor = await this.authorRepository.updateAuthor(id, author);
+    if (!updatedAuthor) {
+      throw new NotFoundException(`Author with id ${id} not found`);
     }
 
-    return this.authorRepository.updateAuthor(id, author);
+    return updatedAuthor;
   }
 
   public async deleteAuthor(id: AuthorId): Promise<void> {
-    await this.authorRepository.deleteAuthor(id);
+    const deleted = await this.authorRepository.deleteAuthor(id);
+    if (!deleted) {
+      throw new NotFoundException(`Author with id ${id} not found`);
+    }
   }
 }

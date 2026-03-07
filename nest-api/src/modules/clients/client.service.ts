@@ -1,13 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PurchaseService } from '../purchases/purchase.service';
 import { ClientId } from './client.entity';
 import {
-  ClientDetailsModel,
-  ClientModel,
-  ClientWithPurchaseCountModel,
-  CreateClientModel,
-  FilterClientsModel,
-  UpdateClientModel,
+    ClientDetailsModel,
+    ClientModel,
+    ClientWithPurchaseCountModel,
+    CreateClientModel,
+    FilterClientsModel,
+    UpdateClientModel,
 } from './client.model';
 import { ClientRepository } from './client.repository';
 
@@ -39,10 +39,10 @@ export class ClientService {
 
   public async getClientById(
     id: ClientId,
-  ): Promise<ClientDetailsModel | undefined> {
+  ): Promise<ClientDetailsModel> {
     const client = await this.clientRepository.getClientById(id);
     if (!client) {
-      return undefined;
+      throw new NotFoundException(`Client with id ${id} not found`);
     }
 
     const purchases = await this.purchaseService.getPurchasesByClientId(id);
@@ -60,16 +60,19 @@ export class ClientService {
   public async updateClient(
     id: ClientId,
     client: UpdateClientModel,
-  ): Promise<ClientModel | undefined> {
-    const oldClient = await this.getClientById(id);
-    if (!oldClient) {
-      return undefined;
+  ): Promise<ClientModel> {
+    const updatedClient = await this.clientRepository.updateClient(id, client);
+    if (!updatedClient) {
+      throw new NotFoundException(`Client with id ${id} not found`);
     }
 
-    return this.clientRepository.updateClient(id, client);
+    return updatedClient;
   }
 
   public async deleteClient(id: ClientId): Promise<void> {
-    await this.clientRepository.deleteClient(id);
+    const deleted = await this.clientRepository.deleteClient(id);
+    if (!deleted) {
+      throw new NotFoundException(`Client with id ${id} not found`);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PurchaseService } from '../purchases/purchase.service';
 import {
   BookDetailsModel,
@@ -36,10 +36,10 @@ export class BookService {
     return [booksWithCount, totalCount];
   }
 
-  public async getBookById(id: BookId): Promise<BookDetailsModel | undefined> {
+  public async getBookById(id: BookId): Promise<BookDetailsModel> {
     const book = await this.bookRepository.getBookById(id);
     if (!book) {
-      return undefined;
+      throw new NotFoundException(`Book with id ${id} not found`);
     }
 
     const purchases = await this.purchaseService.getPurchasesByBookId(id);
@@ -57,16 +57,19 @@ export class BookService {
   public async updateBook(
     id: BookId,
     book: UpdateBookModel,
-  ): Promise<BookModel | undefined> {
-    const oldBook = await this.getBookById(id);
-    if (!oldBook) {
-      return undefined;
+  ): Promise<BookModel> {
+    const updatedBook = await this.bookRepository.updateBook(id, book);
+    if (!updatedBook) {
+      throw new NotFoundException(`Book with id ${id} not found`);
     }
 
-    return this.bookRepository.updateBook(id, book);
+    return updatedBook;
   }
 
   public async deleteBook(id: BookId): Promise<void> {
-    await this.bookRepository.deleteBook(id);
+    const deleted = await this.bookRepository.deleteBook(id);
+    if (!deleted) {
+      throw new NotFoundException(`Book with id ${id} not found`);
+    }
   }
 }

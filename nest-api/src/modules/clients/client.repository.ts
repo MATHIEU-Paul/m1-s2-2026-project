@@ -94,10 +94,13 @@ export class ClientRepository {
     return this.getClientById(id);
   }
 
-  public async deleteClient(id: ClientId): Promise<void> {
+  public async deleteClient(id: ClientId): Promise<boolean> {
     const result = await this.clientRepository.delete(id);
     if (result.affected && result.affected > 0) {
       deleteImage('clients', id);
+      return true;
     }
+
+    return false;
   }
 }
