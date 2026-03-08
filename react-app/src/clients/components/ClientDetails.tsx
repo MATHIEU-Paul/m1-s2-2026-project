@@ -115,7 +115,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
         }}
       >
         <Link to="/clients">
-          <ArrowLeftOutlined /> Back to Clients
+          <ArrowLeftOutlined /> Back to clients
         </Link>
 
         <Space>

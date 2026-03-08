@@ -27,7 +27,6 @@ export class BookController {
     const params = parseListQueryParams<BookSortField>(input, {
       defaultSortField: 'title',
       defaultSortDirection: 'ASC',
-      defaultLimit: 10,
       defaultOffset: 0,
       minLimit: 1,
       maxLimit: 100,

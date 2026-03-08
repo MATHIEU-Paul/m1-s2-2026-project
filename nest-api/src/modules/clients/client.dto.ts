@@ -1,4 +1,4 @@
-import { IsEmail, IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { IsEmail, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CreateClientDto {
   @IsString()
@@ -37,11 +37,14 @@ export class UpdateClientDto {
 export class GetAllClientsDto {
   @IsInt()
   @Min(1)
-  limit: number;
+  @Max(100)
+  @IsOptional()
+  limit?: number;
 
   @IsInt()
   @Min(0)
-  offset: number;
+  @IsOptional()
+  offset?: number;
 
   @IsString()
   @IsOptional()

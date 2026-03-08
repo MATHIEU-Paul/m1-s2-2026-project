@@ -27,7 +27,6 @@ export class ClientController {
     const params = parseListQueryParams<ClientSortField>(rawParams, {
       defaultSortField: 'lastName',
       defaultSortDirection: 'ASC',
-      defaultLimit: 10,
       defaultOffset: 0,
       minLimit: 1,
       maxLimit: 100,

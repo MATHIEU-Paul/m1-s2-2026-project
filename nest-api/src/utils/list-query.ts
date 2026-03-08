@@ -6,7 +6,7 @@ export type ListSortModel<TField extends string = string> = {
 };
 
 export type ListQueryModel<TField extends string = string> = {
-  limit: number;
+  limit?: number;
   offset: number;
   sort: ListSortModel<TField>;
 };
@@ -20,7 +20,6 @@ type RawListQueryInput = {
 type ParseListQueryOptions<TField extends string> = {
   defaultSortField: TField;
   defaultSortDirection?: SortDirection;
-  defaultLimit?: number;
   defaultOffset?: number;
   minLimit?: number;
   maxLimit?: number;
@@ -33,7 +32,6 @@ export const parseListQueryParams = <TField extends string>(
   const {
     defaultSortField,
     defaultSortDirection = 'ASC',
-    defaultLimit = 10,
     defaultOffset = 0,
     minLimit = 1,
     maxLimit = 100,
@@ -50,12 +48,12 @@ export const parseListQueryParams = <TField extends string>(
   const parsedLimit = Number(input.limit);
   const parsedOffset = Number(input.offset);
 
-  const limit =
+  const isLimitValid =
     Number.isFinite(parsedLimit) &&
     parsedLimit >= minLimit &&
-    parsedLimit <= maxLimit
-      ? parsedLimit
-      : defaultLimit;
+    parsedLimit <= maxLimit;
+
+  const limit = isLimitValid ? parsedLimit : undefined;
 
   const offset =
     Number.isFinite(parsedOffset) && parsedOffset >= 0
