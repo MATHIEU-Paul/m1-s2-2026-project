@@ -27,10 +27,12 @@ import {
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { AppBreadcrumb } from '../../components/AppBreadcrumb'
+import { ImageInput } from '../../components/ImageInput'
 import { getInitials, hasImagePath } from '../../components/avatarFallback'
 import { API_BASE_URL } from '../../config/api'
 import { PurchaseBookModal } from '../../purchases/components/PurchaseBookModal'
 import { Route as booksRoute } from '../../routes/books'
+import type { UpdateBookModel } from '../BookModel'
 import { useBookAuthorsProviders } from '../providers/useBookAuthorsProviders'
 import { useBookDetailsProvider } from '../providers/useBookDetailsProvider'
 import { useBookMetadataProvider } from '../providers/useBookMetadataProvider' // Utilisation du metadata provider
@@ -48,6 +50,9 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
     useBookMetadataProvider()
 
   const [isEditing, setIsEditing] = useState(false)
+  const [pendingCoverImage, setPendingCoverImage] = useState<
+    string | null | undefined
+  >(undefined)
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -64,6 +69,7 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
         bookTypeId: book.bookType?.id,
         genreId: book.genre?.id,
       })
+      setPendingCoverImage(undefined)
     }
   }, [book, form])
 
@@ -81,7 +87,12 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
   const saveChanges = async () => {
     try {
       const values = await form.validateFields()
-      await updateBook(values)
+      const updates: UpdateBookModel = values
+      if (pendingCoverImage !== undefined) {
+        updates.coverImage = pendingCoverImage
+      }
+
+      await updateBook(updates)
       await loadBook()
       setIsEditing(false)
       message.success('Book updated successfully!')
@@ -91,6 +102,13 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
   }
 
   if (isLoading) return <Skeleton active avatar paragraph={{ rows: 10 }} />
+
+  const displayedCover =
+    pendingCoverImage === undefined
+      ? book?.coverPath
+      : pendingCoverImage === null
+        ? undefined
+        : pendingCoverImage
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
@@ -118,7 +136,14 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
             <PurchaseBookModal bookId={id} />
             {isEditing ? (
               <>
-                <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+                <Button
+                  onClick={() => {
+                    setPendingCoverImage(undefined)
+                    setIsEditing(false)
+                  }}
+                >
+                  Cancel
+                </Button>
                 <Button type="primary" onClick={saveChanges}>
                   Save
                 </Button>
@@ -139,10 +164,14 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
       <Row gutter={[32, 32]}>
         <Col xs={24} md={8} lg={6}>
           <div style={{ position: 'sticky', top: 20 }}>
-            {book?.coverPath ? (
+            {hasImagePath(displayedCover) ? (
               <img
-                src={API_BASE_URL + book.coverPath}
-                alt={book.title}
+                src={
+                  displayedCover.startsWith('data:')
+                    ? displayedCover
+                    : API_BASE_URL + displayedCover
+                }
+                alt={book?.title ?? 'Book cover'}
                 style={{
                   width: '100%',
                   borderRadius: '8px',
@@ -259,6 +288,24 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
+
+                <Form.Item label="Cover image">
+                  <Space direction="vertical" style={{ width: '100%' }}>
+                    <ImageInput
+                      onImageChange={newImage => setPendingCoverImage(newImage)}
+                    />
+                    <Button
+                      danger
+                      onClick={() => setPendingCoverImage(null)}
+                      disabled={
+                        !hasImagePath(book?.coverPath) &&
+                        pendingCoverImage !== null
+                      }
+                    >
+                      Remove current cover
+                    </Button>
+                  </Space>
+                </Form.Item>
               </Form>
             </Card>
           ) : (

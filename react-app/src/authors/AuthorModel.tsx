@@ -2,13 +2,13 @@ export type AuthorModel = {
   id: string
   firstName: string
   lastName: string
-  imagePath?: string
+  imagePath?: string | null
 }
 
 export type AuthorBookModel = {
   id: string
   title: string
-  coverPath?: string
+  coverPath?: string | null
 }
 
 export type AuthorWithBookCountModel = AuthorModel & {
@@ -26,4 +26,6 @@ export type CreateAuthorModel = {
   image?: string
 }
 
-export type UpdateAuthorModel = Partial<CreateAuthorModel>
+export type UpdateAuthorModel = Partial<Omit<CreateAuthorModel, 'image'>> & {
+  image?: string | null
+}

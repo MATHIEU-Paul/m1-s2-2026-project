@@ -21,7 +21,7 @@ export type BookModel = {
   title: string;
   yearPublished: number;
   numberPages?: number;
-  coverPath?: string;
+  coverPath?: string | null;
   author: AuthorModel;
   bookType?: BookTypeModel;
   genre?: GenreModel;
@@ -53,7 +53,9 @@ export type CreateGenreModel = {
   name: string;
 };
 
-export type UpdateBookModel = Partial<CreateBookModel>;
+export type UpdateBookModel = Partial<Omit<CreateBookModel, 'coverImage'>> & {
+  coverImage?: string | null;
+};
 
 export type BookSortField = keyof BookModel | 'authorName';
 

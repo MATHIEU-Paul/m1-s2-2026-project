@@ -7,7 +7,7 @@ export type ClientModel = {
   firstName: string;
   lastName: string;
   email?: string;
-  imagePath?: string;
+  imagePath?: string | null;
 };
 
 export type ClientDetailsModel = ClientModel & {
@@ -25,7 +25,9 @@ export type CreateClientModel = {
   image?: string;
 };
 
-export type UpdateClientModel = Partial<CreateClientModel>;
+export type UpdateClientModel = Partial<Omit<CreateClientModel, 'image'>> & {
+  image?: string | null;
+};
 
 export type ClientSortField = keyof ClientModel;
 

@@ -132,8 +132,13 @@ export class AuthorRepository {
 
     const { image, ...updates } = author;
 
-    let imagePath = oldAuthor.imagePath;
-    if (image) {
+    let imagePath: string | null = oldAuthor.imagePath ?? null;
+    if (image === null) {
+      if (oldAuthor.imagePath) {
+        deleteImage('authors', oldAuthor.id);
+      }
+      imagePath = null;
+    } else if (image) {
       imagePath = saveImage(image, 'authors', oldAuthor.id);
     }
 

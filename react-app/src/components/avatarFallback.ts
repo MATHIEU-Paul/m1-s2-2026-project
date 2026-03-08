@@ -1,4 +1,4 @@
-export function hasImagePath(path?: string): path is string {
+export function hasImagePath(path?: string | null): path is string {
   return Boolean(path?.trim())
 }
 

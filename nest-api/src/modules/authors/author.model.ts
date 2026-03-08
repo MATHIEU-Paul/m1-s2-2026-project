@@ -5,13 +5,13 @@ export type AuthorModel = {
   id: AuthorId;
   firstName: string;
   lastName: string;
-  imagePath?: string;
+  imagePath?: string | null;
 };
 
 export type AuthorBookModel = {
   id: string;
   title: string;
-  coverPath?: string;
+  coverPath?: string | null;
 };
 
 export type AuthorDetailsModel = AuthorModel & {
@@ -29,7 +29,9 @@ export type CreateAuthorModel = {
   image?: string;
 };
 
-export type UpdateAuthorModel = Partial<CreateAuthorModel>;
+export type UpdateAuthorModel = Partial<Omit<CreateAuthorModel, 'image'>> & {
+  image?: string | null;
+};
 
 export type AuthorSortField = keyof AuthorModel;
 

@@ -143,8 +143,13 @@ export class BookRepository {
 
     const { coverImage, ...updates } = book;
 
-    let coverPath: string | undefined = oldBook.coverPath;
-    if (coverImage) {
+    let coverPath: string | null = oldBook.coverPath ?? null;
+    if (coverImage === null) {
+      if (oldBook.coverPath) {
+        deleteImage('books', oldBook.id);
+      }
+      coverPath = null;
+    } else if (coverImage) {
       coverPath = saveImage(coverImage, 'books', oldBook.id);
     }
 

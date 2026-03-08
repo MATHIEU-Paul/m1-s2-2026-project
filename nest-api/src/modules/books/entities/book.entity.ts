@@ -27,7 +27,7 @@ export class BookEntity extends BaseEntity {
   numberPages: number;
 
   @Column({ name: 'cover_path', type: 'varchar', nullable: true })
-  coverPath?: string;
+  coverPath?: string | null;
 
   @Column({ name: 'author_id', type: 'uuid' })
   authorId: AuthorId;

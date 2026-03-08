@@ -1,32 +1,34 @@
 import {
   ArrowLeftOutlined,
+  BarChartOutlined,
   BookOutlined,
   EditOutlined,
   TeamOutlined,
-  BarChartOutlined,
 } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import {
   Avatar,
   Button,
+  Card,
+  Col,
+  Divider,
   Form,
   Input,
   List,
   message,
+  Row,
   Skeleton,
   Space,
-  Typography,
-  Row,
-  Col,
-  Card,
   Statistic,
-  Divider,
+  Typography,
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { AppBreadcrumb } from '../../components/AppBreadcrumb'
+import { ImageInput } from '../../components/ImageInput'
 import { getInitials, hasImagePath } from '../../components/avatarFallback'
 import { API_BASE_URL } from '../../config/api'
 import { Route as authorsRoute } from '../../routes/authors'
+import type { UpdateAuthorModel } from '../AuthorModel'
 import { useAuthorDetailsProvider } from '../providers/useAuthorDetailsProvider'
 
 const { Title, Text } = Typography
@@ -39,6 +41,9 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
   const { isLoading, author, loadAuthor, updateAuthor } =
     useAuthorDetailsProvider(id)
   const [isEditing, setIsEditing] = useState(false)
+  const [pendingImage, setPendingImage] = useState<string | null | undefined>(
+    undefined,
+  )
   const [form] = Form.useForm()
 
   const authorTitle = [author?.firstName, author?.lastName]
@@ -55,13 +60,19 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
         firstName: author.firstName,
         lastName: author.lastName,
       })
+      setPendingImage(undefined)
     }
   }, [author, form])
 
   const saveChanges = async () => {
     try {
       const values = await form.validateFields()
-      await updateAuthor(values)
+      const updates: UpdateAuthorModel = values
+      if (pendingImage !== undefined) {
+        updates.image = pendingImage
+      }
+
+      await updateAuthor(updates)
       await loadAuthor()
       setIsEditing(false)
       message.success('Author updated successfully!')
@@ -71,6 +82,13 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
   }
 
   if (isLoading) return <Skeleton active avatar paragraph={{ rows: 10 }} />
+
+  const displayedImage =
+    pendingImage === undefined
+      ? author?.imagePath
+      : pendingImage === null
+        ? undefined
+        : pendingImage
 
   return (
     <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px' }}>
@@ -97,7 +115,14 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
           <Space>
             {isEditing ? (
               <>
-                <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+                <Button
+                  onClick={() => {
+                    setPendingImage(undefined)
+                    setIsEditing(false)
+                  }}
+                >
+                  Cancel
+                </Button>
                 <Button type="primary" onClick={saveChanges}>
                   Save Changes
                 </Button>
@@ -121,10 +146,14 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
             bordered={false}
             style={{ textAlign: 'center', borderRadius: '12px' }}
           >
-            {hasImagePath(author?.imagePath) ? (
+            {hasImagePath(displayedImage) ? (
               <Avatar
                 size={160}
-                src={API_BASE_URL + author.imagePath!.trim()}
+                src={
+                  displayedImage.startsWith('data:')
+                    ? displayedImage
+                    : API_BASE_URL + displayedImage.trim()
+                }
                 style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
               />
             ) : (
@@ -186,6 +215,24 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
+
+                <Form.Item label="Profile picture">
+                  <Space direction="vertical" style={{ width: '100%' }}>
+                    <ImageInput
+                      onImageChange={newImage => setPendingImage(newImage)}
+                    />
+                    <Button
+                      danger
+                      onClick={() => setPendingImage(null)}
+                      disabled={
+                        !hasImagePath(author?.imagePath) &&
+                        pendingImage !== null
+                      }
+                    >
+                      Remove current picture
+                    </Button>
+                  </Space>
+                </Form.Item>
               </Form>
             </Card>
           ) : (

@@ -15,7 +15,7 @@ export type BookModel = {
   numberPages?: number
   bookType?: BookMetadataModel
   genre?: BookMetadataModel
-  coverPath?: string
+  coverPath?: string | null
 }
 
 export type BookPurchase = {
@@ -23,7 +23,7 @@ export type BookPurchase = {
   clientId: string
   clientFirstName: string
   clientLastName: string
-  clientImagePath?: string
+  clientImagePath?: string | null
   purchaseDate: string
 }
 
@@ -45,4 +45,6 @@ export type CreateBookModel = {
   genreId?: string
 }
 
-export type UpdateBookModel = Partial<CreateBookModel>
+export type UpdateBookModel = Partial<Omit<CreateBookModel, 'coverImage'>> & {
+  coverImage?: string | null
+}

@@ -21,7 +21,7 @@ export class AuthorEntity extends BaseEntity {
   lastName: string;
 
   @Column({ name: 'image_path', type: 'varchar', nullable: true })
-  imagePath?: string;
+  imagePath?: string | null;
 
   @OneToMany(() => BookEntity, (book) => book.author)
   books: BookEntity[];

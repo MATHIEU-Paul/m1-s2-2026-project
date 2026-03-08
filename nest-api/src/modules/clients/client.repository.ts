@@ -81,8 +81,13 @@ export class ClientRepository {
 
     const { image, ...updates } = client;
 
-    let imagePath = oldClient.imagePath;
-    if (image) {
+    let imagePath: string | null = oldClient.imagePath ?? null;
+    if (image === null) {
+      if (oldClient.imagePath) {
+        deleteImage('clients', oldClient.id);
+      }
+      imagePath = null;
+    } else if (image) {
       imagePath = saveImage(image, 'clients', oldClient.id);
     }
 

@@ -30,7 +30,7 @@ export type ClientPurchaseDetailsModel = {
   bookId: BookId;
   bookTitle: string;
   bookAuthor: string;
-  bookCoverPath?: string;
+  bookCoverPath?: string | null;
   purchaseDate: string;
 };
 
@@ -39,7 +39,7 @@ export type BookPurchaseDetailsModel = {
   clientId: ClientId;
   clientFirstName: string;
   clientLastName: string;
-  clientImagePath?: string;
+  clientImagePath?: string | null;
   purchaseDate: string;
 };
 

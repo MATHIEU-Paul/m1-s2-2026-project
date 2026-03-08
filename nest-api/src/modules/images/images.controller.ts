@@ -34,7 +34,7 @@ export class ImagesController {
       }[ext] || 'application/octet-stream';
 
     res.setHeader('Content-Type', contentType);
-    res.setHeader('Cache-Control', 'public, max-age=31536000');
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
 
     const fileStream = fs.createReadStream(imagePath);
     fileStream.pipe(res);

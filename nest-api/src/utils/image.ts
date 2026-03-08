@@ -25,7 +25,9 @@ export function saveImage(
 
   fs.writeFileSync(absoluteFilePath, buffer);
 
-  return publicFilePath;
+  const version = Math.trunc(fs.statSync(absoluteFilePath).mtimeMs);
+
+  return `${publicFilePath}?v=${version}`;
 }
 
 export function deleteImage(folderName: FolderName, id: string): void {

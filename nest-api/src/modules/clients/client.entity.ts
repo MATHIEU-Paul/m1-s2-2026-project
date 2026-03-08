@@ -17,5 +17,5 @@ export class ClientEntity extends BaseEntity {
   email?: string;
 
   @Column({ name: 'image_path', type: 'varchar', nullable: true })
-  imagePath?: string;
+  imagePath?: string | null;
 }
