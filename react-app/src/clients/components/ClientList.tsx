@@ -18,7 +18,6 @@ export function ClientList() {
     isLoading,
     loadClients,
     deleteClient,
-    updateClient,
     createClient,
   } = useClientProvider()
 
@@ -50,11 +49,7 @@ export function ClientList() {
         items={clients}
         getItemKey={client => client.id}
         renderItem={client => (
-          <ClientListItem
-            client={client}
-            onDelete={deleteClient}
-            onUpdate={updateClient}
-          />
+          <ClientListItem client={client} onDelete={deleteClient} />
         )}
         loading={isLoading}
         totalCount={totalCount}

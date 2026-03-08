@@ -16,15 +16,8 @@ import { BookListItem } from './BookListItem'
 import { CreateBookModal } from './CreateBookModal'
 
 export function BookList() {
-  const {
-    books,
-    totalCount,
-    isLoading,
-    loadBooks,
-    deleteBook,
-    updateBook,
-    createBook,
-  } = useBookProvider()
+  const { books, totalCount, isLoading, loadBooks, deleteBook, createBook } =
+    useBookProvider()
   const [genres, setGenres] = useState<{ id: string; name: string }[]>([])
   const [genreId, setGenreId] = useState<string | undefined>()
   const [query, setQuery] = useState<QueryableListQuery<BookSortField>>({
@@ -106,13 +99,7 @@ export function BookList() {
         onQueryChange={onQueryChange}
         items={books}
         getItemKey={book => book.id}
-        renderItem={book => (
-          <BookListItem
-            book={book}
-            onDelete={deleteBook}
-            onUpdate={updateBook}
-          />
-        )}
+        renderItem={book => <BookListItem book={book} onDelete={deleteBook} />}
         loading={isLoading}
         totalCount={totalCount}
         pageSizeOptions={[5, 10, 20, 50]}

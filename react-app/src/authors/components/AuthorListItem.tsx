@@ -41,7 +41,7 @@ export function AuthorListItem({ author, onDelete }: AuthorListItemProps) {
       }}
     >
       <Col
-        span={15}
+        span={12}
         style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}
       >
         {hasImagePath(author.imagePath) ? (
@@ -57,7 +57,7 @@ export function AuthorListItem({ author, onDelete }: AuthorListItemProps) {
           </span>
         </Link>
       </Col>
-      <Col span={6} style={{ margin: 'auto 0' }}>
+      <Col span={9} style={{ margin: 'auto 0' }}>
         <Badge
           count={author.bookCount || 0}
           showZero
@@ -66,7 +66,7 @@ export function AuthorListItem({ author, onDelete }: AuthorListItemProps) {
         />
         {(author.bookCount || 0) <= 1 ? 'book written' : 'books written'}
       </Col>
-      <Col span={3} style={{ textAlign: 'right' }}>
+      <Col span={3} style={{ textAlign: 'right', margin: 'auto 0' }}>
         <Button type="primary" danger onClick={showDeleteConfirm}>
           <DeleteOutlined />
         </Button>
