@@ -104,7 +104,7 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
             ]}
           />
           <Link to={booksRoute.to} style={{ display: 'inline-flex', alignItems: 'center', marginTop: 8 }}>
-            <ArrowLeftOutlined style={{ marginRight: 8 }} /> Back to list
+            <ArrowLeftOutlined style={{ marginRight: 8 }} /> Back to books
           </Link>
         </Col>
         <Col>
@@ -206,7 +206,9 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
               <div style={{ marginBottom: 24 }}>
                 <Title level={1} style={{ margin: 0 }}>{book?.title}</Title>
                 <Title level={3} type="secondary" style={{ marginTop: 4, fontWeight: 300 }}>
-                  by {book?.author?.firstName} {book?.author?.lastName}
+                  <Link to="/authors/$authorId" params={{ authorId: book?.author.id ?? '' }} style={{ display: 'inline-flex', alignItems: 'center' }}>
+                      by {book?.author?.firstName} {book?.author?.lastName}
+                  </Link>
                 </Title>
               </div>
 
