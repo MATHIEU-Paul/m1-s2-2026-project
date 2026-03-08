@@ -26,6 +26,7 @@ const DEFAULT_LOAD_QUERY: LoadClientsQuery = {
 export const useClientProvider = () => {
   const [clients, setClients] = useState<ClientWithPurchaseCountModel[]>([])
   const [totalCount, setTotalCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
   const lastQueryRef = useRef<LoadClientsQuery>(DEFAULT_LOAD_QUERY)
 
   const loadClients = useCallback((query?: Partial<LoadClientsQuery>) => {
@@ -34,6 +35,7 @@ export const useClientProvider = () => {
       ...query,
     }
     lastQueryRef.current = effectiveQuery
+    setIsLoading(true)
 
     axios
       .get(`${API_BASE_URL}/clients`, {
@@ -48,6 +50,7 @@ export const useClientProvider = () => {
         setTotalCount(data.data.totalCount ?? 0)
       })
       .catch(err => console.error(err))
+      .finally(() => setIsLoading(false))
   }, [])
 
   const createClient = useCallback(
@@ -89,6 +92,7 @@ export const useClientProvider = () => {
   return {
     clients,
     totalCount,
+    isLoading,
     loadClients,
     createClient,
     updateClient,

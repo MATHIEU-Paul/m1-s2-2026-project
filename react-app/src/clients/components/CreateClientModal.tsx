@@ -36,13 +36,16 @@ export function CreateClientModal({ onCreate }: CreateClientModalProps) {
 
   return (
     <>
-      <Button
-        icon={<PlusOutlined />}
-        type="primary"
-        onClick={() => setIsOpen(true)}
-      >
-        Create Client
-      </Button>
+      <div style={{ textAlign: 'center' }}>
+        <Button
+          icon={<PlusOutlined />}
+          type="primary"
+          onClick={() => setIsOpen(true)}
+          style={{ minWidth: 220 }}
+        >
+          Create Client
+        </Button>
+      </div>
       <Modal
         open={isOpen}
         onCancel={onClose}

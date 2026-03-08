@@ -24,13 +24,16 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
 
   return (
     <>
-      <Button
-        icon={<PlusOutlined />}
-        type="primary"
-        onClick={() => setIsOpen(true)}
-      >
-        Create Author
-      </Button>
+      <div style={{ textAlign: 'center' }}>
+        <Button
+          icon={<PlusOutlined />}
+          type="primary"
+          onClick={() => setIsOpen(true)}
+          style={{ minWidth: 220 }}
+        >
+          Create Author
+        </Button>
+      </div>
       <Modal
         open={isOpen}
         onCancel={onClose}

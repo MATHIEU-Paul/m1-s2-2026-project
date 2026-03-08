@@ -1,4 +1,4 @@
-import { Pagination, Radio, Select, Space, Typography } from 'antd'
+import { Empty, Pagination, Radio, Select, Space, Spin, Typography } from 'antd'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 export type ListSortOrder = 'ASC' | 'DESC'
@@ -30,6 +30,7 @@ type QueryableListProps<TSortField extends string, TItem> = {
   items: TItem[]
   getItemKey: (item: TItem) => string
   renderItem: (item: TItem) => ReactNode
+  loading?: boolean
   totalCount: number
   pageSizeOptions?: number[]
   entityLabel?: string
@@ -56,6 +57,7 @@ export function QueryableList<TSortField extends string, TItem>({
   items,
   getItemKey,
   renderItem,
+  loading = false,
   totalCount,
   pageSizeOptions,
   entityLabel,
@@ -108,74 +110,98 @@ export function QueryableList<TSortField extends string, TItem>({
     entityLabel,
   }
 
+  const isInitialLoading = loading && items.length === 0
+  const isEmpty = !loading && totalCount === 0
+
   return (
     <>
-      <div
-        style={{
-          marginTop: '1rem',
-          marginBottom: '0.75rem',
-        }}
-      >
+      {!isInitialLoading ? (
         <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '0.75rem',
-            flexWrap: 'wrap',
+            marginTop: '1rem',
+            marginBottom: '0.75rem',
           }}
         >
-          <Typography.Text strong>{sortLabel}</Typography.Text>
-          <Space align="center" wrap>
-            {filterComponent}
-            <Select<TSortField>
-              value={sortField}
-              onChange={value => onSortFieldChange(value as TSortField)}
-              style={{ width: 180, maxWidth: '100%' }}
-              options={sortOptions}
-            />
-            <Radio.Group
-              optionType="button"
-              buttonStyle="solid"
-              value={sortOrder}
-              onChange={event =>
-                onSortOrderChange(event.target.value as ListSortOrder)
-              }
-              options={[
-                { label: 'Ascending', value: 'ASC' },
-                { label: 'Descending', value: 'DESC' },
-              ]}
-            />
-          </Space>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
+            }}
+          >
+            <Typography.Text strong>{sortLabel}</Typography.Text>
+            <Space align="center" wrap>
+              {filterComponent}
+              <Select<TSortField>
+                value={sortField}
+                onChange={value => onSortFieldChange(value as TSortField)}
+                style={{ width: 180, maxWidth: '100%' }}
+                options={sortOptions}
+              />
+              <Radio.Group
+                optionType="button"
+                buttonStyle="solid"
+                value={sortOrder}
+                onChange={event =>
+                  onSortOrderChange(event.target.value as ListSortOrder)
+                }
+                options={[
+                  { label: 'Ascending', value: 'ASC' },
+                  { label: 'Descending', value: 'DESC' },
+                ]}
+              />
+            </Space>
+          </div>
         </div>
-      </div>
+      ) : null}
 
-      <div>
-        {items.map(item => (
-          <div key={getItemKey(item)}>{renderItem(item)}</div>
-        ))}
-      </div>
+      {isInitialLoading ? (
+        <div
+          style={{
+            minHeight: '280px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Spin size="large" />
+        </div>
+      ) : isEmpty ? (
+        <div style={{ padding: '2rem 1rem' }}>
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </div>
+      ) : (
+        <div>
+          {items.map(item => (
+            <div key={getItemKey(item)}>{renderItem(item)}</div>
+          ))}
+        </div>
+      )}
 
-      <div
-        style={{
-          padding: '0 1rem 1rem 1rem',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          marginTop: '0.75rem',
-        }}
-      >
-        <Pagination
-          current={pagination.current}
-          pageSize={pagination.pageSize}
-          total={pagination.total}
-          onChange={pagination.onChange}
-          showSizeChanger
-          pageSizeOptions={pagination.pageSizeOptions ?? [5, 10, 20, 50]}
-          showTotal={(total, range) =>
-            `${range[0]}-${range[1]} of ${total} ${pagination.entityLabel ?? 'items'}`
-          }
-        />
-      </div>
+      {!isInitialLoading ? (
+        <div
+          style={{
+            padding: '0 1rem 1rem 1rem',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            marginTop: '0.75rem',
+          }}
+        >
+          <Pagination
+            current={pagination.current}
+            pageSize={pagination.pageSize}
+            total={pagination.total}
+            onChange={pagination.onChange}
+            showSizeChanger
+            pageSizeOptions={pagination.pageSizeOptions ?? [5, 10, 20, 50]}
+            showTotal={(total, range) =>
+              `${range[0]}-${range[1]} of ${total} ${pagination.entityLabel ?? 'items'}`
+            }
+          />
+        </div>
+      ) : null}
     </>
   )
 }

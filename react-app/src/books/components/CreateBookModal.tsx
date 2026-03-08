@@ -45,13 +45,16 @@ export function CreateBookModal({ onCreate }: CreateBookModalProps) {
 
   return (
     <>
-      <Button
-        icon={<PlusOutlined />}
-        type="primary"
-        onClick={() => setIsOpen(true)}
-      >
-        Create Book
-      </Button>
+      <div style={{ textAlign: 'center' }}>
+        <Button
+          icon={<PlusOutlined />}
+          type="primary"
+          onClick={() => setIsOpen(true)}
+          style={{ minWidth: 220 }}
+        >
+          Create Book
+        </Button>
+      </div>
       <Modal
         open={isOpen}
         onCancel={onClose}

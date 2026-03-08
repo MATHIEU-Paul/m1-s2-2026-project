@@ -12,8 +12,14 @@ import { AuthorListItem } from './AuthorListItem'
 import { CreateAuthorModal } from './CreateAuthorModal'
 
 export function AuthorList() {
-  const { authors, totalCount, loadAuthors, deleteAuthor, createAuthor } =
-    useAuthorProvider()
+  const {
+    authors,
+    totalCount,
+    isLoading,
+    loadAuthors,
+    deleteAuthor,
+    createAuthor,
+  } = useAuthorProvider()
 
   const onQueryChange = (query: QueryableListQuery<AuthorSortField>) => {
     loadAuthors({
@@ -44,6 +50,7 @@ export function AuthorList() {
         renderItem={author => (
           <AuthorListItem author={author} onDelete={deleteAuthor} />
         )}
+        loading={isLoading}
         totalCount={totalCount}
         pageSizeOptions={[5, 10, 20, 50]}
         entityLabel="authors"

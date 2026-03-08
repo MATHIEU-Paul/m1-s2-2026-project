@@ -1,6 +1,6 @@
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
-import { Avatar, Button, Col, Modal, Row } from 'antd'
+import { Avatar, Badge, Button, Col, Modal, Row } from 'antd'
 import { getInitials, hasImagePath } from '../../components/avatarFallback'
 import { API_BASE_URL } from '../../config/api'
 import type { AuthorWithBookCountModel } from '../AuthorModel'
@@ -41,7 +41,7 @@ export function AuthorListItem({ author, onDelete }: AuthorListItemProps) {
       }}
     >
       <Col
-        span={18}
+        span={15}
         style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}
       >
         {hasImagePath(author.imagePath) ? (
@@ -54,11 +54,19 @@ export function AuthorListItem({ author, onDelete }: AuthorListItemProps) {
         <Link to={`/authors/$authorId`} params={{ authorId: author.id }}>
           <span style={{ fontWeight: 'bold' }}>
             {author.firstName} {author.lastName}
-          </span>{' '}
-          - {author.bookCount} book{author.bookCount > 1 ? 's' : ''}
+          </span>
         </Link>
       </Col>
-      <Col span={6} style={{ textAlign: 'right' }}>
+      <Col span={6} style={{ margin: 'auto 0' }}>
+        <Badge
+          count={author.bookCount || 0}
+          showZero
+          color="var(--app-brand-600)"
+          style={{ marginRight: '1rem' }}
+        />
+        {(author.bookCount || 0) <= 1 ? 'book written' : 'books written'}
+      </Col>
+      <Col span={3} style={{ textAlign: 'right' }}>
         <Button type="primary" danger onClick={showDeleteConfirm}>
           <DeleteOutlined />
         </Button>

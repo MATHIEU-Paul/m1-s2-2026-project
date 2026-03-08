@@ -114,6 +114,7 @@ function About() {
             </li>
             <li>Bonus: purchase modal with client selector and date picker</li>
             <li>Bonus: dynamic page titles and custom favicon branding</li>
+            <li>Bonus: Home page with stats and recent purchases</li>
           </ul>
         </article>
       </section>

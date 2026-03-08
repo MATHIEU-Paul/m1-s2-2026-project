@@ -15,6 +15,7 @@ export function ClientList() {
   const {
     clients,
     totalCount,
+    isLoading,
     loadClients,
     deleteClient,
     updateClient,
@@ -55,6 +56,7 @@ export function ClientList() {
             onUpdate={updateClient}
           />
         )}
+        loading={isLoading}
         totalCount={totalCount}
         pageSizeOptions={[5, 10, 20, 50]}
         entityLabel="clients"

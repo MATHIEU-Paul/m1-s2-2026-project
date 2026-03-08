@@ -27,6 +27,7 @@ const DEFAULT_LOAD_QUERY: LoadBooksQuery = {
 export const useBookProvider = () => {
   const [books, setBooks] = useState<BookWithPurchaseCountModel[]>([])
   const [totalCount, setTotalCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
   const lastQueryRef = useRef<LoadBooksQuery>(DEFAULT_LOAD_QUERY)
 
   const loadBooks = useCallback((query?: Partial<LoadBooksQuery>) => {
@@ -35,6 +36,7 @@ export const useBookProvider = () => {
       ...query,
     }
     lastQueryRef.current = effectiveQuery
+    setIsLoading(true)
 
     axios
       .get(`${API_BASE_URL}/books`, {
@@ -52,6 +54,7 @@ export const useBookProvider = () => {
         setTotalCount(data.data.totalCount ?? 0)
       })
       .catch(err => console.error(err))
+      .finally(() => setIsLoading(false))
   }, [])
 
   const createBook = (book: CreateBookModel) => {
@@ -81,5 +84,13 @@ export const useBookProvider = () => {
       .catch(err => console.error(err))
   }
 
-  return { books, totalCount, loadBooks, createBook, updateBook, deleteBook }
+  return {
+    books,
+    totalCount,
+    isLoading,
+    loadBooks,
+    createBook,
+    updateBook,
+    deleteBook,
+  }
 }

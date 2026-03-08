@@ -26,6 +26,7 @@ const DEFAULT_LOAD_QUERY: LoadAuthorsQuery = {
 export const useAuthorProvider = () => {
   const [authors, setAuthors] = useState<AuthorWithBookCountModel[]>([])
   const [totalCount, setTotalCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
   const lastQueryRef = useRef<LoadAuthorsQuery>(DEFAULT_LOAD_QUERY)
 
   const loadAuthors = useCallback((query?: Partial<LoadAuthorsQuery>) => {
@@ -34,6 +35,7 @@ export const useAuthorProvider = () => {
       ...query,
     }
     lastQueryRef.current = effectiveQuery
+    setIsLoading(true)
 
     axios
       .get(`${API_BASE_URL}/authors`, {
@@ -48,6 +50,7 @@ export const useAuthorProvider = () => {
         setTotalCount(response.data.totalCount ?? 0)
       })
       .catch(err => console.error(err))
+      .finally(() => setIsLoading(false))
   }, [])
 
   const createAuthor = useCallback(
@@ -83,6 +86,7 @@ export const useAuthorProvider = () => {
   return {
     authors,
     totalCount,
+    isLoading,
     loadAuthors,
     createAuthor,
     updateAuthor,

@@ -2,8 +2,8 @@ import axios from 'axios'
 import { useCallback, useState } from 'react'
 import { API_BASE_URL } from '../../config/api'
 import type {
-    PurchaseHomeSaleModel,
-    PurchaseHomeSummaryModel,
+  PurchaseHomeSaleModel,
+  PurchaseHomeSummaryModel,
 } from '../PurchaseModel'
 
 const DEFAULT_SUMMARY_LIMIT = 5

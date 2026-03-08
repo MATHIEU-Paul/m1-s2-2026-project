@@ -174,13 +174,19 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
                   <FileTextOutlined /> Pages:{' '}
                   <b>{book?.numberPages || 'N/A'}</b>
                 </Text>
-                <Divider style={{ margin: '8px 0' }} />
-                <Space wrap>
-                  {book?.bookType && (
-                    <Tag color="blue">{book.bookType.name}</Tag>
-                  )}
-                  {book?.genre && <Tag color="purple">{book.genre.name}</Tag>}
-                </Space>
+                {book?.bookType && book?.genre && (
+                  <>
+                    <Divider style={{ margin: '8px 0' }} />
+                    <Space wrap>
+                      {book?.bookType && (
+                        <Tag color="blue">{book.bookType.name}</Tag>
+                      )}
+                      {book?.genre && (
+                        <Tag color="purple">{book.genre.name}</Tag>
+                      )}
+                    </Space>
+                  </>
+                )}
               </Space>
             </Card>
           </div>

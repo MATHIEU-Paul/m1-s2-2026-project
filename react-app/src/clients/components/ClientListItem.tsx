@@ -114,7 +114,7 @@ export function ClientListItem({
         <Badge
           count={client.purchaseCount || 0}
           showZero
-          color="blue"
+          color="var(--app-brand-600)"
           style={{ marginRight: '1rem' }}
         />
         {(client.purchaseCount || 0) <= 1
